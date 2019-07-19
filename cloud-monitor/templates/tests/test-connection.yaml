@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "cloud-monitor.fullname" . }}-test-connection"
+  labels:
+{{ include "cloud-monitor.labels" . | indent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "cloud-monitor.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
